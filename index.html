@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RC Beam Design Calculator - T-Beam</title>
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input {
+            margin-bottom: 10px;
+        }
+        button {
+            margin-top: 10px;
+        }
+        .output {
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .success {
+            color: black;
+            font-weight: bold;
+        }
+        .image {
+            width: 280px;
+            height: auto;
+        }
+        .centered {
+            text-align: center;
+        }
+        .centered-img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        } 
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+          width: 150px;
+          text-align: center;
+          padding: 5px;
+          border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="centered">TESTING PAGE</h1>
+    <h1 class="centered">Singly Reinforced T-Beam</h1>
+    <h2 class="centered">ANALYSIS AT FAILURE</h2>
+
+    <img src="https://github.com/obracewell/RCanalysiscalculator/blob/main/assets/DRBlabeled.png?raw=true" 
+        alt="T-Beam" 
+        class="image centered-img" />
+    
+    <p class="success">Input the following values:</p>
+    
+    <label for="fc">Compressive stress of concrete, f<sub>c</sub> (psi): </label>
+    <input type="number" id="fc"><br>
+
+    <label for="fy">Yield stress of steel, f<sub>y</sub> (psi): </label>
+    <input type="number" id="fy"><br>
+
+    
+    
+    <label for="d">Depth of tension steel, d (in): </label>
+    <input type="number" id="d"><br>
+
+    <label for="bw">Width of web, b<sub>w</sub> (in): </label>
+    <input type="number" id="bw"><br>
+
+    <label for="beff">Effective width, b<sub>eff</sub> (in): </label>
+    <input type="number" id="beff"><br>
+
+    <label for="hf">Height of flange, h<sub>f</sub> (in): </label>
+    <input type="number" id="hf"><br>
+
+    <label for="Mu">Design capacity, M<sub>u</sub> (in): </label>
+    <input type="number" id="Mu"><br>
+    
+    <button onclick="performAnalysis()">Calculate</button>
+
+    <div id="output" class="output"></div>
+    <div id="customOutput" style="margin-top: 15px; font-weight: bold;"></div>
+   
+
+    <script>
+
+        const barTable = [
+          { barSelection: "2#4 bars", area: 0.39, rows: "1 row", bmin: 6.8 },
+          { barSelection: "3#4 bars", area: 0.58, rows: "1 row", bmin: 8.3 },
+          { barSelection: "4#4 bars", area: 0.78, rows: "1 row", bmin: 9.8 },
+          { barSelection: "4#4 bars", area: 0.78, rows: "2 rows", bmin: 6.8 },
+          { barSelection: "5#4 bars", area: 0.98, rows: "1 row", bmin: 11.3 },
+          { barSelection: "6#4 bars", area: 1.18, rows: "1 row", bmin: 12.8 },
+          { barSelection: "6#4 bars", area: 1.18, rows: "2 rows", bmin: 8.3 },
+          { barSelection: "6#4 bars", area: 1.18, rows: "3 rows", bmin: 6.8 },
+          { barSelection: "7#4 bars", area: 1.37, rows: "1 row", bmin: 14.3 },
+          { barSelection: "8#4 bars", area: 1.57, rows: "1 row", bmin: 15.8 },
+          { barSelection: "8#4 bars", area: 1.57, rows: "2 rows", bmin: 9.8 },
+          { barSelection: "9#4 bars", area: 1.77, rows: "3 rows", bmin: 8.3 },
+          { barSelection: "2#5 bars", area: 0.61, rows: "1 row", bmin: 6.9 },
+          { barSelection: "3#5 bars", area: 0.91, rows: "1 row", bmin: 8.5 },
+          { barSelection: "4#5 bars", area: 1.23, rows: "1 row", bmin: 10.2 },
+          { barSelection: "4#5 bars", area: 1.23, rows: "2 rows", bmin: 6.9 },
+          { barSelection: "5#5 bars", area: 1.53, rows: "1 row", bmin: 11.8 },
+          { barSelection: "6#5 bars", area: 1.84, rows: "1 row", bmin: 13.4 },
+          { barSelection: "6#5 bars", area: 1.84, rows: "2 rows", bmin: 8.5 },
+          { barSelection: "6#5 bars", area: 1.84, rows: "3 rows", bmin: 6.9 },
+          { barSelection: "7#5 bars", area: 2.15, rows: "1 row", bmin: 15.0 },
+          { barSelection: "8#5 bars", area: 2.45, rows: "1 row", bmin: 16.7 },
+          { barSelection: "8#5 bars", area: 2.45, rows: "2 rows", bmin: 10.2 },
+          { barSelection: "9#5 bars", area: 2.76, rows: "3 rows", bmin: 8.5 },
+          { barSelection: "2#6 bars", area: 0.88, rows: "1 row", bmin: 7.0 },
+          { barSelection: "3#6 bars", area: 1.32, rows: "1 row", bmin: 8.8 },
+          { barSelection: "4#6 bars", area: 1.77, rows: "1 row", bmin: 10.5 },
+          { barSelection: "4#6 bars", area: 1.77, rows: "2 rows", bmin: 7.0 },
+          { barSelection: "5#6 bars", area: 2.21, rows: "1 row", bmin: 12.3 },
+          { barSelection: "6#6 bars", area: 2.65, rows: "1 row", bmin: 14.0 },
+          { barSelection: "6#6 bars", area: 2.65, rows: "2 rows", bmin: 8.8 },
+          { barSelection: "6#6 bars", area: 2.65, rows: "3 rows", bmin: 7.0 },
+          { barSelection: "7#6 bars", area: 3.09, rows: "1 row", bmin: 15.8 },
+          { barSelection: "8#6 bars", area: 3.53, rows: "1 row", bmin: 17.5 },
+          { barSelection: "8#6 bars", area: 3.53, rows: "2 rows", bmin: 10.5 },
+          { barSelection: "9#6 bars", area: 3.98, rows: "3 rows", bmin: 8.8 },
+          { barSelection: "2#7 bars", area: 1.20, rows: "1 row", bmin: 7.2 },
+          { barSelection: "3#7 bars", area: 1.80, rows: "1 row", bmin: 9.0 },
+          { barSelection: "4#7 bars", area: 2.41, rows: "1 row", bmin: 10.9 },
+          { barSelection: "4#7 bars", area: 2.41, rows: "2 rows", bmin: 7.2 },
+          { barSelection: "5#7 bars", area: 3.01, rows: "1 row", bmin: 12.8 },
+          { barSelection: "6#7 bars", area: 3.61, rows: "1 row", bmin: 14.7 },
+          { barSelection: "6#7 bars", area: 3.61, rows: "2 rows", bmin: 9.0 },
+          { barSelection: "6#7 bars", area: 3.61, rows: "3 rows", bmin: 7.2 },
+          { barSelection: "7#7 bars", area: 4.21, rows: "1 row", bmin: 16.5 },
+          { barSelection: "8#7 bars", area: 4.81, rows: "1 row", bmin: 18.4 },
+          { barSelection: "8#7 bars", area: 4.81, rows: "2 rows", bmin: 10.9 },
+          { barSelection: "9#7 bars", area: 5.41, rows: "3 rows", bmin: 9.0 },
+          { barSelection: "2#8 bars", area: 1.57, rows: "1 row", bmin: 7.3 },
+          { barSelection: "3#8 bars", area: 2.35, rows: "1 row", bmin: 9.3 },
+          { barSelection: "4#8 bars", area: 3.14, rows: "1 row", bmin: 11.3 },
+          { barSelection: "4#8 bars", area: 3.14, rows: "2 rows", bmin: 7.3 },
+          { barSelection: "5#8 bars", area: 3.93, rows: "1 row", bmin: 13.3 },
+          { barSelection: "6#8 bars", area: 4.71, rows: "1 row", bmin: 15.3 },
+          { barSelection: "6#8 bars", area: 4.71, rows: "2 rows", bmin: 9.3 },
+          { barSelection: "6#8 bars", area: 4.71, rows: "3 rows", bmin: 7.3 },
+          { barSelection: "7#8 bars", area: 5.50, rows: "1 row", bmin: 17.3 },
+          { barSelection: "8#8 bars", area: 6.28, rows: "1 row", bmin: 19.3 },
+          { barSelection: "8#8 bars", area: 6.28, rows: "2 rows", bmin: 11.3 },
+          { barSelection: "9#8 bars", area: 7.07, rows: "3 rows", bmin: 9.3 },
+          { barSelection: "2#9 bars", area: 2.00, rows: "1 row", bmin: 7.6 },
+          { barSelection: "3#9 bars", area: 3.00, rows: "1 row", bmin: 9.8 },
+          { barSelection: "4#9 bars", area: 4.00, rows: "1 row", bmin: 12.1 },
+          { barSelection: "4#9 bars", area: 4.00, rows: "2 rows", bmin: 7.6 },
+          { barSelection: "5#9 bars", area: 5.00, rows: "1 row", bmin: 14.3 },
+          { barSelection: "6#9 bars", area: 6.00, rows: "1 row", bmin: 16.6 },
+          { barSelection: "6#9 bars", area: 6.00, rows: "2 rows", bmin: 9.8 },
+          { barSelection: "6#9 bars", area: 6.00, rows: "3 rows", bmin: 7.6 },
+          { barSelection: "7#9 bars", area: 7.00, rows: "1 row", bmin: 18.8 },
+          { barSelection: "8#9 bars", area: 8.00, rows: "1 row", bmin: 21.1 },
+          { barSelection: "8#9 bars", area: 8.00, rows: "2 rows", bmin: 12.1 },
+          { barSelection: "9#9 bars", area: 9.00, rows: "3 rows", bmin: 9.8 },
+          { barSelection: "2#10 bars", area: 2.53, rows: "1 row", bmin: 7.8 },
+          { barSelection: "3#10 bars", area: 3.79, rows: "1 row", bmin: 10.4 },
+          { barSelection: "4#10 bars", area: 5.06, rows: "1 row", bmin: 12.9 },
+          { barSelection: "4#10 bars", area: 5.06, rows: "2 rows", bmin: 7.8 },
+          { barSelection: "5#10 bars", area: 6.33, rows: "1 row", bmin: 15.5 },
+          { barSelection: "6#10 bars", area: 7.59, rows: "1 row", bmin: 18.0 },
+          { barSelection: "6#10 bars", area: 7.59, rows: "2 rows", bmin: 10.4 },
+          { barSelection: "6#10 bars", area: 7.59, rows: "3 rows", bmin: 7.8 },
+          { barSelection: "7#10 bars", area: 8.86, rows: "1 row", bmin: 20.5 },
+          { barSelection: "8#10 bars", area: 10.12, rows: "1 row", bmin: 23.1 },
+          { barSelection: "8#10 bars", area: 10.12, rows: "2 rows", bmin: 12.9 },
+          { barSelection: "9#10 bars", area: 10.12, rows: "3 rows", bmin: 10.4 },
+          { barSelection: "2#11 bars", area: 3.12, rows: "1 row", bmin: 8.1 },
+          { barSelection: "3#11 bars", area: 4.68, rows: "1 row", bmin: 10.9 },
+          { barSelection: "4#11 bars", area: 6.25, rows: "1 row", bmin: 13.8 },
+          { barSelection: "4#11 bars", area: 6.25, rows: "2 rows", bmin: 8.1 },
+          { barSelection: "5#11 bars", area: 7.81, rows: "1 row", bmin: 16.6 },
+          { barSelection: "6#11 bars", area: 9.37, rows: "1 row", bmin: 19.4 },
+          { barSelection: "6#11 bars", area: 9.37, rows: "2 rows", bmin: 10.9 },
+          { barSelection: "6#11 bars", area: 9.37, rows: "3 rows", bmin: 8.1 },
+          { barSelection: "7#11 bars", area: 10.94, rows: "1 row", bmin: 22.2 },
+          { barSelection: "8#11 bars", area: 12.50, rows: "1 row", bmin: 25.0 },
+          { barSelection: "8#11 bars", area: 12.50, rows: "2 rows", bmin: 13.8 },
+          { barSelection: "9#11 bars", area: 14.06, rows: "3 rows", bmin: 10.9 },
+          { barSelection: "2#14 bars", area: 4.50, rows: "1 row", bmin: 8.9 },
+          { barSelection: "3#14 bars", area: 6.75, rows: "1 row", bmin: 12.3 },
+          { barSelection: "4#14 bars", area: 9.00, rows: "1 row", bmin: 15.7 },
+          { barSelection: "4#14 bars", area: 9.00, rows: "2 rows", bmin: 8.9 },
+          { barSelection: "5#14 bars", area: 11.25, rows: "1 row", bmin: 19.0 },
+          { barSelection: "6#14 bars", area: 13.50, rows: "1 row", bmin: 22.4 },
+          { barSelection: "6#14 bars", area: 13.50, rows: "2 rows", bmin: 12.3 },
+          { barSelection: "6#14 bars", area: 13.50, rows: "3 rows", bmin: 8.9 },
+          { barSelection: "7#14 bars", area: 15.75, rows: "1 row", bmin: 25.8 },
+          { barSelection: "8#14 bars", area: 18.00, rows: "1 row", bmin: 29.2 },
+          { barSelection: "8#14 bars", area: 18.00, rows: "2 rows", bmin: 15.7 },
+          { barSelection: "9#14 bars", area: 20.25, rows: "3 rows", bmin: 12.3 },
+          { barSelection: "2#18 bars", area: 8.00, rows: "1 row", bmin: 10.6 },
+          { barSelection: "3#18 bars", area: 12.00, rows: "1 row", bmin: 15.1 },
+          { barSelection: "4#18 bars", area: 16.00, rows: "1 row", bmin: 19.6 },
+          { barSelection: "4#18 bars", area: 16.00, rows: "2 rows", bmin: 10.6 },
+          { barSelection: "5#18 bars", area: 20.00, rows: "1 row", bmin: 24.1 },
+          { barSelection: "6#18 bars", area: 24.00, rows: "1 row", bmin: 28.6 },
+          { barSelection: "6#18 bars", area: 24.00, rows: "2 rows", bmin: 15.1 },
+          { barSelection: "6#18 bars", area: 24.00, rows: "3 rows", bmin: 10.6 },
+          { barSelection: "7#18 bars", area: 28.00, rows: "1 row", bmin: 33.1 },
+          { barSelection: "8#18 bars", area: 32.00, rows: "1 row", bmin: 37.7 },
+          { barSelection: "8#18 bars", area: 32.00, rows: "2 rows", bmin: 19.4 },
+          { barSelection: "9#19 bars", area: 36.00, rows: "3 rows", bmin: 15.1 }
+        ];
+
+        
+        function performAnalysis() {
+            // Get input values
+            fc = parseFloat(document.getElementById('fc').value);
+            fy = parseFloat(document.getElementById('fy').value);
+            d = parseFloat(document.getElementById('d').value);
+            bw = parseFloat(document.getElementById('bw').value);
+            beff = parseFloat(document.getElementById('beff').value);
+            hf = parseFloat(document.getElementById('hf').value);
+            Mu = parseFloat(document.getElementById('Mu').value);
+
+            
+            // Validate inputs
+            if (isNaN(fc) || isNaN(fy) || isNaN(d) || isNaN(bw) || isNaN(beff) || isNaN(hf) || isNaN(Mu)) {
+                alert("Please enter all values.");
+                return;
+            }
+
+            let output = 'Design:\n\n';
+            let errorMessage = '';
+            
+            //check which t-beam case it is
+            const Af = hf * beff;
+            const Ac = (As*fy)/(0.85*fc);
+
+            let testMu = 0.9 * (0.85*fc*hf*beff*(d-(0.5*hf)));
+            let caseNumber;
+            if (testMu >= Mu) {
+                caseNumber = 1;
+            } else {
+                caseNumber = 2;
+            }
+
+            const sqrt = Math.sqrt;
+            
+            let preq;
+            let Asreq;
+            if (caseNumber == 1) {
+                Rn = (Mu*12000)/(0.9*beff*d*d);
+                preq = ((0.85*fc)/fy)*(1-sqrt(1-((2*Rn)/(0.85*fc))));
+                Asreq = preq*beff*d;
+            } else {
+                Acf = (beff - bw)*hf;
+                Mnf = 0.85*fc*Acf*(d-(0.5*hf))/12000;
+                Asf = (0.85*fc*Acf)/fy;
+                Mnw = (Mu/0.9)-Mnf;
+                Rn = (Mnw*12000)/(0.9*bw*d*d);
+                preq = ((0.85*fc)/fy)*(1-sqrt(1-((2*Rn)/(0.85*fc))));
+                Asw = preq*beff*d;
+                Asreq = Asf + Asw;
+            }
+            output += `A<sub>s,req</sub> = ${Asreq.toFixed(2)} in\n`;
+
+              // Filter the bar table
+              const sortedTable = barTable.sort((a, b) => a.area - b.area);
+
+              let less = [];
+              let equal = [];
+              let greater = [];
+
+              sortedTable.forEach(row => {
+                if (row.area < Asreq) less.push(row);
+                else if (row.area === Asreq) equal.push(row);
+                else greater.push(row);
+              });
+
+              // Take all equal, first 10 from greater
+              const selectedRows = equal.concat(greater.slice(0, 10))
+                                        .filter(row => row.bmin <= bw);
+
+              // Build table output
+              output += `<table>
+                          <tr>
+                            <th>Bar Selection</th>
+                            <th>Area (in²)</th>
+                            <th>Rows</th>
+                            <th>b<sub>min</sub> (in)</th>
+                          </tr>`;
+              selectedRows.forEach(row => {
+                output += `<tr>
+                            <td>${row.barSelection}</td>
+                            <td>${row.area.toFixed(2)}</td>
+                            <td>${row.rows}</td>
+                            <td>${row.bmin}</td>
+                          </tr>`;
+                 });
+              output += `</table>`;
+
+            output += `
+              <p style="margin-top: 20px;">Find an option that b<sub>min</sub> > b<sub>w</sub> = ${bw.toFixed(2)} and ANALYZE</p>
+              <label for="As">Area of steel for chosen bar selection, A<sub>s</sub> (in<sup>2</sup>): </label>
+              <input type="number" id="As" step="0.01">
+              <button onclick="performCustomCalc()">Analyze</button>
+              <div id="customOutput" style="margin-top: 15px; font-weight: bold;"></div>
+`;
+              document.getElementById('output').innerHTML = output;
+            }
+    let fc, fy, d, bw, beff, hf, Mu, As;
+        function performCustomCalc() {
+            let output = '';
+            let errorMessage = '';
+            let As = parseFloat(document.getElementById('As').value);
+            
+            // Validate inputs
+            if (isNaN(As)) {
+                alert("Please enter all values.");
+                return;
+            }
+            const b1 = 0.9;
+
+            // Check if As exceeds minimum value
+            const Asmin1 = (3 * Math.sqrt(fc) * bw * d) / fy;
+            const Asmin2 = (200 * bw * d) / fy;
+            const Asmin = Math.max(Asmin1, Asmin2);
+            
+            if (As < Asmin) {
+                errorMessage += 'The cross-sectional area of the steel does NOT exceed the minimum.\n';
+                errorMessage += 'These section parameters cannot be used.\n';
+            } else {
+                output += 'The cross-sectional area exceeds the minimum.\n';
+            }
+
+            //check which t-beam case it is
+            const Af = hf * beff;
+            const Ac = (As*fy)/(0.85*fc);
+
+            let caseNumberR;
+            let ba;
+            if (Ac <= Af) {
+                caseNumberR = 1;
+                ba = beff;
+            } else { 
+                caseNumberR = 2;
+                ba = bw;
+            }
+            
+            // Solve for a
+            let a;
+            if (caseNumberR == 1) {
+                a = Ac/beff;
+                output += `a = ${a.toFixed(2)} in\n`;
+            } else {
+                a = hf + ((Ac - Af)/bw);
+                output += `a = ${a.toFixed(2)} in\n`;
+            }
+
+            // Display b1
+            output += `&#946<sub>1</sub> = ${b1.toFixed(2)}\n`;
+            
+            // Solve for c
+            const c = a / b1;
+            output += `c = ${c.toFixed(2)} in\n`;
+
+            // Solve for strain in steel
+            const stlstrain = ((d - c) / c) * 0.003;
+            output += `&#949<sub>t</sub> = ${stlstrain.toFixed(4)}\n`;
+
+            // Calculate phi
+            let phi;
+            if (stlstrain >= 0.005) {
+                phi = 0.9;
+                output += `&#934 = ${phi.toFixed(2)}, Ductile Section\n`;
+            } else if (stlstrain >= 0.004 && stlstrain < 0.005) {
+                phi = 0.65 + (stlstrain - 0.002) * (250 / 3);
+                output += `&#934 = ${phi.toFixed(2)}, <span style="color:orange;">Transition Zone</span>\n`;
+            } else {
+                errorMessage += 'Tension strain in steel is less than 0.004 and therefore is not ACI compliant.\n';
+                errorMessage += 'These section parameters cannot be used.\n';
+            }
+            
+            // Solve for maximum internal moment
+            let Mn;
+            if (caseNumberR == 1) {
+                Mn = As * fy * (d - (a / 2)) * (1 / 12000);
+                output += `Maximum internal moment: M<sub>n</sub> = ${Mn.toFixed(2)} k·ft\n`;
+            } else {
+                const yc = ((Af * (hf / 2)) + ((a - hf) * bw) * (hf + (0.5 * (a - hf))))/Ac;
+                Mn = As * fy * (d-yc) * (1/12000);
+                output += `Maximum internal moment: M<sub>n</sub> = ${Mn.toFixed(2)} k·ft\n`;
+                }
+            
+            // Compare to usable/design capacity
+            const descap = phi * Mn;
+            if (descap >= Mu) {
+                output += `${descap.toFixed(2)} k·ft > ${Mu.toFixed(2)} k·ft = M<sub>u</sub>\n`;
+                output += `Minimum design capacity met!\n`;
+            } else {
+                output += `${descap.toFixed(2)} k·ft < ${Mu.toFixed(2)} k·ft = M<sub>u</sub>\n`;
+                output += `Minimum design capacity not met. Analyze another option\n`;
+                }
+        // Always display results
+            let finalOutput = `<span class="success">${output}</span>`;
+
+            // Append error message if exists
+            if (errorMessage) {
+                finalOutput += `<br><span class="error">${errorMessage}</span>`;
+            }
+
+            // Display in output div
+            document.getElementById('customOutput').innerHTML = finalOutput;
+    
+        }
+        
+    </script>
+</body>
+</html>
