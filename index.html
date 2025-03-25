@@ -69,18 +69,18 @@
     <label for="fc">Compressive stress of concrete, f'<sub>c</sub> (psi): </label>
     <select id="fc">
         <option value="">Select</option>
-        <option value="3000">3,000</option>
-        <option value="4000">4,000</option>
-        <option value="5000">5,000</option>
+        <option value="3000">3000</option>
+        <option value="4000">4000</option>
+        <option value="5000">5000</option>
     </select>
     <br>
 
     <label for="fy">Yield stress of steel, f<sub>y</sub> (psi): </label>
     <select id="fy">
         <option value="">Select</option>
-        <option value="40000">40,000</option>
-        <option value="50000">50,000</option>
-        <option value="60000">60,000</option>
+        <option value="40000">40000</option>
+        <option value="50000">50000</option>
+        <option value="60000">60000</option>
     </select>
     <br>
 
@@ -284,7 +284,7 @@
             
             if ((fy == 60000) && (preq < 0.0033) && (caseNumber == 1)){
                 errorMessage += 'With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.\n';
-                errorMessage += 'Do not continue with Bar Options. Try decreasing b<sub>eff</sub> or d and relcalculate.\n';
+                errorMessage += 'Do not continue with Bar Options. Try decreasing b<sub>eff</sub> or d and recalculate.\n';
             } else if ((fy == 60000) && (preq < 0.0033) && (caseNumber == 2)){
                 errorMessage += 'With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.\n';
                 errorMessage += 'Do not continue with Bar Options. Try decreasing b<sub>w</sub> or d and recalculate.\n';
