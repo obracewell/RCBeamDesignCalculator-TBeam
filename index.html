@@ -283,26 +283,62 @@
             output += `A<sub>s,req</sub> = ${Asreq.toFixed(2)} in\n\n`;
             
             if ((fy == 60000) && (preq < 0.0033) && (caseNumber == 1)){
-                errorMessage += 'With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.\n';
-                errorMessage += 'Do not continue with Bar Options. Try decreasing b<sub>eff</sub> or d and recalculate.\n';
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try decreasing b<sub>eff</sub> or d and recalculate.</p><br>`;
             } else if ((fy == 60000) && (preq < 0.0033) && (caseNumber == 2)){
-                errorMessage += 'With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.\n';
-                errorMessage += 'Do not continue with Bar Options. Try decreasing b<sub>w</sub> or d and recalculate.\n';
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try decreasing b<sub>w</sub> or d and recalculate.</p><br>`;
             } else if ((fy == 50000) && (preq < 0.0040) && (caseNumber == 1)){
-                errorMessage += 'With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.\n';
-                errorMessage += 'Do not continue with Bar Options. Try decreasing b<sub>eff</sub> or d and recalculate.\n';
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try decreasing b<sub>eff</sub> or d and recalculate.</p><br>`;
             } else if ((fy == 50000) && (preq < 0.0040) && (caseNumber == 2)){
-                errorMessage += 'With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.\n';
-                errorMessage += 'Do not continue with Bar Options. Try decreasing b<sub>w</sub> or d and recalculate.\n';
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try decreasing b<sub>w</sub> or d and recalculate.</p><br>`;
             } else if ((fy == 40000) && (preq < 0.0040) && (caseNumber == 1)){
-                errorMessage += 'With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.\n';
-                errorMessage += 'Do not continue with Bar Options. Try decreasing b<sub>eff</sub> or d and recalculate.\n';
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try decreasing b<sub>eff</sub> or d and recalculate.</p><br>`;
             } else if ((fy == 40000) && (preq < 0.0040) && (caseNumber == 2)){
-                errorMessage += 'With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.\n';
-                errorMessage += 'Do not continue with Bar Options. Try decreasing b<sub>w</sub> or d and recalculate.\n';
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try decreasing b<sub>w</sub> or d and recalculate.</p><br>`;
+            
+            } else if ((fy == 60000) && (fc == 4000) && (preq > 0.0181) && (caseNumber == 1)){
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try increasing b<sub>eff</sub> or d and recalculate.</p><br>`;
+            } else if ((fy == 60000) && (fc == 4000) && (preq > 0.0181) && (caseNumber == 2)){
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try increasing b<sub>w</sub> or d and recalculate.</p><br>`;
+            } else if ((fy == 60000) && (fc == 3000) && (preq > 0.0136) && (caseNumber == 1)){
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try increasing b<sub>eff</sub> or d and recalculate.</p><br>`;
+            } else if ((fy == 60000) && (fc == 3000) && (preq > 0.0136) && (caseNumber == 2)){
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try increasing b<sub>w</sub> or d and recalculate.</p><br>`;
+            } else if ((fy == 50000) && (fc == 4000) && (preq > 0.0217) && (caseNumber == 1)){
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try increasing b<sub>eff</sub> or d and recalculate.</p><br>`;
+            } else if ((fy == 50000) && (fc == 4000) && (preq > 0.0217) && (caseNumber == 2)){
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try increasing b<sub>w</sub> or d and recalculate.</p><br>`;
+            } else if ((fy == 50000) && (fc == 3000) && (preq > 0.0163) && (caseNumber == 1)){
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try increasing b<sub>eff</sub> or d and recalculate.</p><br>`;
+            } else if ((fy == 50000) && (fc == 3000) && (preq > 0.0163) && (caseNumber == 2)){
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try increasing b<sub>w</sub> or d and recalculate.</p><br>`;
+            } else if ((fy == 40000) && (fc == 4000) && (preq > 0.0271) && (caseNumber == 1)){
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try increasing b<sub>eff</sub> or d and recalculate.</p><br>`;
+            } else if ((fy == 40000) && (fc == 4000) && (preq > 0.0271) && (caseNumber == 2)){
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try increasing b<sub>w</sub> or d and recalculate.</p><br>`;
+            } else if ((fy == 40000) && (fc == 3000) && (preq > 0.0203) && (caseNumber == 1)){
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try increasing b<sub>eff</sub> or d and recalculate.</p><br>`;
+            } else if ((fy == 40000) && (fc == 3000) && (preq > 0.0203) && (caseNumber == 2)){
+                output = `<p class="error">With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.</p><br>`;
+                output = `<p class="error">Do not continue with Bar Options. Try increasing b<sub>w</sub> or d and recalculate.</p><br>`;
             }
-            
-            
+                
             output += `Bar Options:\n`;
 
               // Filter the bar table
