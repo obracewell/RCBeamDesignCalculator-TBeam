@@ -280,6 +280,8 @@
                 Asreq = Asf + Asw;
             }
 
+            output += `A<sub>s,req</sub> = ${Asreq.toFixed(2)} in\n\n`;
+            
             if ((fy == 60000) && (preq < 0.0033) && (caseNumber == 1)){
                 errorMessage += 'With current b<sub>eff</sub>, b<sub>w</sub>, d, h<sub>f</sub>, and M<sub>u</sub> there is no ductile solution.\n';
                 errorMessage += 'Do not continue with Bar Options. Try decreasing b<sub>eff</sub> or d and relcalculate.\n';
@@ -300,7 +302,7 @@
                 errorMessage += 'Do not continue with Bar Options. Try decreasing b<sub>w</sub> or d and recalculate.\n';
             }
             
-            output += `A<sub>s,req</sub> = ${Asreq.toFixed(2)} in\n\n`;
+            
             output += `Bar Options:\n`;
 
               // Filter the bar table
