@@ -414,7 +414,16 @@
                 alert("Please enter all values.");
                 return;
             }
-            const b1 = 0.9;
+            
+            // Assign beta1 value
+            let b1;
+            if (fc <= 4000 && fc > 0) {
+                b1 = 0.85;
+            } else if (fc > 4000 && fc < 8000) {
+                b1 = 0.85 - ((fc - 4000) / 1000) * 0.05;
+            } else if (fc >= 8000) {
+                b1 = 0.65;
+            }
 
             // Check if As exceeds minimum value
             const Asmin1 = (3 * Math.sqrt(fc) * bw * d) / fy;
