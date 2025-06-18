@@ -6,11 +6,52 @@
     <title>RC Beam Design Calculator - T-Beam</title>
     <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
     <style>
+        .site-header {
+            background-color: #003366;
+            color: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 15px;
+        }
+        .image-button {
+            display: inline-block;
+            padding: 2px;
+            border-radius: 8px;
+            background-color: white;
+            transition:background-color 0.2s;
+            text-decoration: none;
+        }
+        .button-image {
+            height: 45px;
+            width: 45px;
+            object-fit: contain;
+            vertical-align: middle;
+            border-radius: 8px;
+        }
+        .image-button:hover {
+            background-color: #e0e0e0;
+        }
+        .site-footer {
+            background-color: #f3a26d;
+            color: white;
+            text-align: center;
+            padding: 10px 10px;
+            margin-top: 80px;
+            font-size: 14px;
+        }
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9:
         }
         input {
+            margin-bottom: 10px;
+        }
+        select {
             margin-bottom: 10px;
         }
         button {
@@ -53,11 +94,24 @@
           color: blue;
           text-decoration: underline;
         }
+        .page-content {
+            padding: 0px 60px;
+        }
     </style>
 </head>
 <body>
-    <h1 class="centered">RC Beam Design Calculator</h1>
-    <h1 class="centered">Singly Reinforced T-Beam</h1>
+    <header class="site-header">
+        <div class="header-content">
+            <div>
+              <h1>REINFORCED CONCRETE CALCULATOR</h1>
+          </div>
+            <a href="https://obracewell.github.io/RCBeamCalculator/" class="image-button">
+                <img src="https://raw.githubusercontent.com/obracewell/RCBeamDesignCalculator-SRB/refs/heads/main/assets/homebutton.png" alt="Button Icon" class="button-image"></a>
+          </div>
+    </header>
+
+<div class="page-content">
+    <h1 class="centered">Design: Singly Reinforced T-Beam</h1>
 
     <img src="https://raw.githubusercontent.com/obracewell/RCBeamDesignCalculator-TBeam/refs/heads/main/assets/Tbeamlabeled.png" 
         alt="T-Beam" 
@@ -101,7 +155,7 @@
 
     <div id="output" class="output"></div>
     <div id="customOutput" style="margin-top: 15px; font-weight: bold;"></div>
-   
+</div>
 
     <script>
 
@@ -516,5 +570,8 @@
         }
         
     </script>
+<footer class="site-footer">
+    <p>Reinforced Concrete Calculator created by Olivia Bracewell, UF Herbert Wertheim College of Engineering</p>
+</footer>
 </body>
 </html>
