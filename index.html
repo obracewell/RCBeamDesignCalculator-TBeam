@@ -142,6 +142,18 @@
           cursor: pointer;
           z-index: 1000;
         }
+        .modal-content--lg {
+          width: 720px;           /* larger than your 334px */
+          max-width: 94vw;        /* responsive on small screens */
+          max-height: 88vh;       /* prevent overflow off screen */
+          height: auto;           /* let content size it */
+        }
+
+        .modal-img--lg {
+          max-width: 100%;
+          max-height: 80vh;
+          height: auto;
+        }
     </style>
 </head>
 <body>
@@ -502,8 +514,12 @@
               output += `</table>`;
             
             output += `
-                Use <a href="https://obracewell.github.io/RCBeamCalculator-Tables/" target="_blank" class="styled-link">Tables 3 and 4</a> to find more options.<br>`;
-
+              <p style="margin-top:1px">
+                Use <a href="https://obracewell.github.io/RCBeamCalculator-Tables/" target="_blank" class="styled-link">Tables 3 and 4</a> to find more options. 
+                <a href="#" class="styled-link" onclick="showModal('barModal');return false;">Important Info for Multi‑Row Design!</a>
+              </p>
+            `;
+            
             output += `
               <p style="margin-top: 20px;">Choose an option and ANALYZE</p>
               <label for="As">Area of steel for chosen bar selection, A<sub>s</sub> (in<sup>2</sup>): </label>
@@ -625,13 +641,12 @@
     
         }
 
-function showModal() {
-  document.getElementById('infoModal').style.display = 'block';
+function showModal(id = 'infoModal') {
+  document.getElementById(id).style.display = 'block';
 }
-
-function closeModal() {
-  document.getElementById('infoModal').style.display = 'none';
-}
+function closeModal(id = 'infoModal') {
+  document.getElementById(id).style.display = 'none';
+}  
         
     </script>
 
@@ -639,6 +654,18 @@ function closeModal() {
   <div class="modal-content">
     <span class="close-btn" onclick="closeModal()">&times;</span>
     <img src="https://raw.githubusercontent.com/obracewell/RCColumnDesignCalculator-Square/refs/heads/main/assets/resettipimage.png" alt="Refresh website if changing inputs" class="modal-img">
+  </div>
+</div>
+
+<div id="barModal" class="modal">
+  <div class="modal-content modal-content--lg">
+    <button class="close-btn" onclick="closeModal('barModal')">&times;</button>
+    <!-- Use a larger image or any diagram you prefer -->
+    <img
+      src="https://raw.githubusercontent.com/obracewell/RCBeamDesignCalculator-SRB/refs/heads/main/assets/bar%20stacking%20note.png"
+      alt="Bar layout guidance"
+      class="modal-img modal-img--lg"
+    >
   </div>
 </div>
     
